@@ -1,0 +1,61 @@
+{
+    
+    "CREDENTIALS_FILE" : "config/kudos-394418-344fa572b19e.json",
+    "SCOPES" : ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"],
+
+    "SPREADSHEET_ID" : "https://docs.google.com/spreadsheets/d/15AA4GDfMb_1mGVCk7CwKUkqup5nAQL4KNSGtO-GWj7M/edit#gid=0",
+
+    "SHEET" : "Respuestas_localFormKudos",
+    "WORKSHEET" : "respuestas",
+
+    "NOMBRES" : [
+        "Anónimo",
+        "Agustín Díaz",
+        "Alejandra Montoya",
+        "Anamaría Bedoya",
+        "Andrés Castaño",
+        "Andrés Rodríguez",
+        "Camilo Ríos",
+        "Cristian Sanchez",
+        "David Florez",
+        "Davinson Arrieta",
+        "Dayana  Benjumea",
+        "Francisco Cifuentes",
+        "Isabel Londoño",
+        "Jesus Buitrago",
+        "Jorge Barrientos",
+        "Jorge Londoño",
+        "Jorge Plazas",
+        "Jose  Ibañez",
+        "Joseph Olin",
+        "Juan Alzate",
+        "Juan Giraldo",
+        "Juan Martinez",
+        "Leopoldo Arango",
+        "Lina Escobar",
+        "Lorena Bedoya",
+        "Marcela Castaño",
+        "María Isabel Saldarriaga",
+        "Mariana García",
+        "Martín Montoya",
+        "Natalia Alvarez",
+        "Sebastián Arboleda",
+        "Sebastian Jaramillo",
+        "Sebastian Manzanera",
+        "Sebastián Quiñónez",
+        "Silvana Bossa"
+    ],
+
+    "TEAMS" : [
+        "Equipo MAMC",
+        "Equipo Rival Stars Horse Racing PC",
+        "Equipo Rival Stars Horse Racing VR",
+        "Area ADMIN",
+        "Art Division",
+        "Area DEV",
+        "IT Division",
+        "Area QA",
+        "Back Catalog"
+    ]
+    
+}
