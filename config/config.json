@@ -47,14 +47,14 @@
     ],
 
     "TEAMS" : [
-        "Equipo MAMC",
-        "Equipo Rival Stars Horse Racing PC",
-        "Equipo Rival Stars Horse Racing VR",
-        "Area ADMIN",
+        "MAMC Team",
+        "HRC-PC Team",
+        "HRC-VR Team",
+        "Administrative area",
         "Art Division",
-        "Area DEV",
+        "DEV area",
         "IT Division",
-        "Area QA",
+        "QA area",
         "Back Catalog"
     ]
     

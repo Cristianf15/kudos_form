@@ -8,7 +8,11 @@ from PIL import Image
 
 
 # Configurar el ancho de la página para que sea el ancho de la pantalla
-st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="Formulario Kudos PikPok", 
+    page_icon='📜',
+    layout="wide"
+    )
 
 # Imagenes Index
 st.session_state.kudos_logo = Image.open('img/kudos_logo.jpg')
@@ -70,18 +74,18 @@ def view1():
 
     # Campo Personas
     personas = st.multiselect(
-    'Nombre de la persona, area o proyecto que quieras felicitar: :red[*]', nombres, [], placeholder="Elige una o varias opciones")
+    '¿A quién vas a felicitar?: :red[*]', nombres, [], placeholder="Elige una o varias opciones")
     name_error = st.empty()
     st.write("")
 
     # Campo Situación
-    situacion = st.text_area("Situación: :red[*]")
+    situacion = st.text_area("¿Por qué les mandas Kudos?: :red[*]")
     situation_error = st.empty()
     st.write("")
 
     # Valores a elegir
     valores = st.multiselect(
-        "Valores a Elegir: :red[*]", 
+        "¿Cuáles son los valores relacionados?: :red[*]", 
         [
             'Be Curious',
             'Take Ownership',
