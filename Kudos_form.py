@@ -7,9 +7,9 @@ import json
 from PIL import Image
 
 
-from streamlit_modal import Modal
+# from streamlit_modal import Modal
 
-import streamlit.components.v1 as components
+# import streamlit.components.v1 as components
 
 # Configurar el ancho de la página para que sea el ancho de la pantalla
 st.set_page_config(
