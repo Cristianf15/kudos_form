@@ -7,6 +7,10 @@ import json
 from PIL import Image
 
 
+from streamlit_modal import Modal
+
+import streamlit.components.v1 as components
+
 # Configurar el ancho de la página para que sea el ancho de la pantalla
 st.set_page_config(
     page_title="Formulario Kudos PikPok", 
@@ -14,7 +18,7 @@ st.set_page_config(
     layout="wide"
     )
 
-# Imagenes Index
+# Imágenes Index
 st.session_state.kudos_logo = Image.open('img/kudos_logo.jpg')
 st.session_state.pikpok_logo = Image.open('img/pikpok_logo.png')
 
@@ -36,35 +40,86 @@ st.session_state.sheets_service = build("sheets", "v4", credentials=st.session_s
 ## ============================================================================================
 
 
-
+st.session_state.cont = 0
 ## ============================================================================================
 ## ========================================= VISTA 1 ==========================================
 ## ======================================= Formulario =========================================
 def view1():
 
-    st.title('Formulario postulación KUDOS')
+    
+    # col1, col2 = st.columns([100, 195])
+    # col1.title(f'¡Envía Kudos a un compañero!')
+
+    st.title(f'¡Envía Kudos a un compañero!')
+    
+    # info = col2.button("i")
+    # placeholder = st.empty()
+    # if info:
+    #     text = 'A veces es fácil olvidar o desmeritar los pequeños logros del día a día. No les damos importancia porque es el "deber ser", "lo que se espera", o más burradas de esas.\n\nPero siendo honestos, ¿a quién no lo motiva un comentario positivo?, ¿hay algo más reconfortante que ser felicitado por un compañero?, ¿algo mejor que un "¡sos un teso!"?\n\nEn PikPok creemos en la importancia de celebrar nuestros logros, de felicitar a nuestros compañeros, de seguirnos impulsando hacia adelante con un mensaje de aliento.\n\n¡Para eso tenemos los Kudos! Después de todo, no hay nada mejor que unas palabras de aprecio, una palmadita en el hombro, ¡o un sticker de una carita feliz!'
+    #     st.info(text)
+
+    # css_styles = '''<script language="javascript">
+    #                     document-getElementsByClassName("css-s6y0nb").style.background = "red";
+    #                 </script>'''
+    
+
+    # modal = Modal("info", key="modal",max_width=600,padding=5)
+    # open_modal = st.button("Open")
+    # if open_modal:
+    #     modal.open()
+
+    # if modal.is_open():
+    #     with modal.container():
+    #         html_string = '''
+    #         <style>
+    #             .modal-content {       
+    #                 top: 0%;
+    #                 left: 0%;
+
+    #                 background-color: #fff;
+    #                 margin-left: 20%;
+    #                 margin-bottom: 20%;
+    #                 padding: 15px;
+    #                 border-radius: 10px;
+    #                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    #             }
+
+    #         </style>
+
+    #         <p "text-align:center;" class="modal-content">
+    #             A veces es fácil olvidar o desmeritar los pequeños logros del día a día.
+    #             No les damos importancia porque es el "deber ser", "lo que se espera", o más burradas de esas.
+    #             Pero siendo honestos, ¿a quién no lo motiva un comentario positivo?, ¿hay algo más reconfortante que ser felicitado por un compañero?, ¿algo mejor que un "¡sos un teso!"?
+    #             En PikPok creemos en la importancia de celebrar nuestros logros, de felicitar a nuestros compañeros, de seguirnos impulsando hacia adelante con un mensaje de aliento.
+    #             ¡Para eso tenemos los Kudos! Después de todo, no hay nada mejor que unas palabras de aprecio, una palmadita en el hombro, ¡o un sticker de una carita feliz!
+    #         </p>
+            
+    #         '''
+    #         components.html(html_string, width=500, height=370, scrolling=False)
+    #         st.markdown(css_styles, unsafe_allow_html=True)
+
+    # st.session_state.cont = True
+    # if info and st.session_state.cont:
+    #     with placeholder.container():
+    #             st.session_state.cont = False
+    #             st.write(f"⏳ seconds have passed")
+                    
+    # else:
+    #     placeholder.empty()
+
+
     st.write("")
     st.write("")
     st.write("")
 
     nombres = config["NOMBRES"]
-    teams = [
-        'Equipo MAMC',
-        'Equipo Rival Stars Horse Racing PC',
-        'Equipo Rival Stars Horse Racing VR',
-        'Area ADMIN',
-        'Area ART',
-        'Area DEV',
-        'Area IT',
-        'Area QA'
-    ]
 
     # Campo Nombre
     nombre = st.selectbox('Tu nombre:', (nombres))
     st.write("")
 
 
-    # Quitar opcion anonimo y evitar autonominaciones
+    # Quitar opción anónimo y evitar auto-nominaciones
     nombres.extend(config["TEAMS"])
 
     nombres = [name for name in nombres if name != "Anónimo"]
@@ -74,7 +129,7 @@ def view1():
 
     # Campo Personas
     personas = st.multiselect(
-    '¿A quién vas a felicitar?: :red[*]', nombres, [], placeholder="Elige una o varias opciones")
+    '¿A quién vas a felicitar?: :red[*]', nombres, [], placeholder="Elige una o más opciones")
     name_error = st.empty()
     st.write("")
 
@@ -92,14 +147,14 @@ def view1():
             'Collaborate Well',
             'Otro'
         ],
-        placeholder="Elige una o varias opciones"
+        placeholder="Elige una o más opciones"
     )
     valor_error = st.empty()
     st.write("")
 
     otro = ""
     if 'Otro' in valores:
-        otro = st.text_area('Si marcaste "Otro" en la pregunta anterior y deseas complementar tu respuesta, puedes hacerlo en este espacio: ')
+        otro = st.text_area('¿Qué valor viste reflejado?: ')
         if otro == "":
             otro = "n/a"
 
@@ -127,11 +182,11 @@ def view1():
                     
 
                 else:
-                    valor_error.error('Por favor, elige minimo un valor.', icon="🥸")
+                    valor_error.error('Por favor elige un valor.', icon="🥸")
             else:
-                situation_error.error('Por favor, cuéntanos la situación, comportamiento o evento que quieres celebrar.', icon="🤓")  
+                situation_error.error('Cuéntanos la situación que quieras celebrar.', icon="🤓")  
         else:
-            name_error.error('Por favor, elige minimo una persona o área.', icon="🧐")  
+            name_error.error('Por favor elige a alguien.', icon="🧐")  
 
 ## ======================================= END VISTA 1 =======================================
 ## ===========================================================================================
@@ -139,9 +194,9 @@ def view1():
 ## ============================================================================================
 ## ========================================= VISTA 2 ==========================================
 def view2():
-    st.success('Formulario enviado con exito.', icon="👍🏻")
+    st.success('Formulario enviado con éxito.', icon="👍🏻")
     
-    if st.button('Felicitar a alguien más'):
+    if st.button('Enviar más Kudos'):
         st.session_state.current_view = "vista1"
         st.experimental_rerun()
 ## ======================================= END VISTA 2 =======================================
