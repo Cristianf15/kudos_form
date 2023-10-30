@@ -40,24 +40,12 @@ st.session_state.sheets_service = build("sheets", "v4", credentials=st.session_s
 ## ============================================================================================
 
 
-st.session_state.cont = 0
 ## ============================================================================================
 ## ========================================= VISTA 1 ==========================================
 ## ======================================= Formulario =========================================
 def view1():
-
-    
-    # col1, col2 = st.columns([100, 195])
     col1, col2, col3 = st.columns([125, 170, 10])
     col1.title(f'¡Envía Kudos a un compañero!')
-
-    # st.title(f'¡Envía Kudos a un compañero!')
-    
-    # info = col2.button("i")
-    # placeholder = st.empty()
-    # if info:
-    #     text = 'A veces es fácil olvidar o desmeritar los pequeños logros del día a día. No les damos importancia porque es el "deber ser", "lo que se espera", o más burradas de esas.\n\nPero siendo honestos, ¿a quién no lo motiva un comentario positivo?, ¿hay algo más reconfortante que ser felicitado por un compañero?, ¿algo mejor que un "¡sos un teso!"?\n\nEn PikPok creemos en la importancia de celebrar nuestros logros, de felicitar a nuestros compañeros, de seguirnos impulsando hacia adelante con un mensaje de aliento.\n\n¡Para eso tenemos los Kudos! Después de todo, no hay nada mejor que unas palabras de aprecio, una palmadita en el hombro, ¡o un sticker de una carita feliz!'
-    #     st.info(text)  style="background-color: red;"
 
     css_styles = '''<style>
                         #info{
@@ -67,90 +55,34 @@ def view1():
                             text-align:center;
                             width: 99%;
                         }
-
                         .e1f1d6gn2 > iframe{
                             background-color: #0E1117;
                             color: white;
                             font-family: sans-serif;
                         }
-
                         .e1f1d6gn0{
                             background-color: #0E1117;
                             color: white;
                             font-family: sans-serif;
                         }
-
                         .css-8542t9{
                             border: 1rem white;
                             border-top: solid;
                             border-left: solid;
                             border-bottom: solid;
-                            
+                            border-radius: 10px;
                             border-right: solid;
                         }
-
-                        .css-nahz7x{
-                            border: 1rem white;
-                            border-right: ; //problema css-8542t9 e1f1d6gn0
-                        }
-
-                        .css-7fajao {
-                            border: 1rem white;
-                            border-right: ;
-                        }
-
                         .ef3psqc11 { 
                             margin-right: 3%
                         }
-
-
-
                     </style>
                 '''
     st.markdown(css_styles, unsafe_allow_html=True)
 
     modal = Modal('<p style="font-size: 2rem">Info</p>', key="modal",max_width=600,padding=0)
     open_modal = col3.button("i")
-    if open_modal:
-        modal.open()
-
-    if modal.is_open():
-        with modal.container():
-            html_string = '''
-            <style>
-                body{
-                    margin: 0px;
-                }
-                .modal-content {
-                    color: white;
-                    font-family: sans-serif;
-                    margin: 0px;
-                    text-align:center;
-                    padding-left: 20%;
-                    line-height: 1.7;
-                }
-            </style>
-
-            <p class="modal-content">
-                A veces es fácil olvidar o desmeritar los pequeños logros del día a día.
-                No les damos importancia porque es el "deber ser", "lo que se espera", o más burradas de esas.
-                Pero siendo honestos, ¿a quién no lo motiva un comentario positivo?, ¿hay algo más reconfortante que ser felicitado por un compañero?, ¿algo mejor que un "¡sos un teso!"?
-                En PikPok creemos en la importancia de celebrar nuestros logros, de felicitar a nuestros compañeros, de seguirnos impulsando hacia adelante con un mensaje de aliento.
-                ¡Para eso tenemos los Kudos! Después de todo, no hay nada mejor que unas palabras de aprecio, una palmadita en el hombro, ¡o un sticker de una carita feliz!
-            </p>
-            
-            '''
-            components.html(html_string, width=500, height=390, scrolling=False)
-            
-
-    # st.session_state.cont = True
-    # if info and st.session_state.cont:
-    #     with placeholder.container():
-    #             st.session_state.cont = False
-    #             st.write(f"⏳ seconds have passed")
-                    
-    # else:
-    #     placeholder.empty()
+    
 
 
     st.write("")
@@ -179,7 +111,7 @@ def view1():
     st.write("")
 
     # Campo Situación
-    situacion = st.text_area("¿Por qué les mandas Kudos?: :red[*]")
+    situacion = st.text_area("Cuéntanos la situación que quieras celebrar.: :red[*]")
     situation_error = st.empty()
     st.write("")
 
@@ -229,9 +161,40 @@ def view1():
                 else:
                     valor_error.error('Por favor elige un valor.', icon="🥸")
             else:
-                situation_error.error('Cuéntanos la situación que quieras celebrar.', icon="🤓")  
+                situation_error.error('Por favor cuéntanos la situación que quieras celebrar.', icon="🤓")  
         else:
-            name_error.error('Por favor elige a alguien.', icon="🧐")  
+            name_error.error('Por favor elige a alguien.', icon="🧐")
+
+    if open_modal:
+        modal.open()
+
+    if modal.is_open():
+        with modal.container():
+            html_string = '''
+            <style>
+                body{
+                    margin: 0px;
+                }
+                .modal-content {
+                    color: white;
+                    font-family: sans-serif;
+                    margin: 0px;
+                    text-align:center;
+                    padding-left: 20%;
+                    line-height: 1.7;
+                }
+            </style>
+
+            <p class="modal-content">
+                A veces es fácil olvidar o desmeritar los pequeños logros del día a día.
+                No les damos importancia porque es el "deber ser", "lo que se espera", o más burradas de esas.
+                Pero siendo honestos, ¿a quién no lo motiva un comentario positivo?, ¿hay algo más reconfortante que ser felicitado por un compañero?, ¿algo mejor que un "¡sos un teso!"?
+                En PikPok creemos en la importancia de celebrar nuestros logros, de felicitar a nuestros compañeros, de seguirnos impulsando hacia adelante con un mensaje de aliento.
+                ¡Para eso tenemos los Kudos! Después de todo, no hay nada mejor que unas palabras de aprecio, una palmadita en el hombro, ¡o un sticker de una carita feliz!
+            </p>
+            
+            '''
+            components.html(html_string, width=500, height=390, scrolling=False) 
 
 ## ======================================= END VISTA 1 =======================================
 ## ===========================================================================================
