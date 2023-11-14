@@ -1,4 +1,4 @@
-from datetime import datetime 
+from datetime import datetime, timedelta
 from googleapiclient.discovery import build 
 from google.oauth2 import service_account 
 import gspread
@@ -135,6 +135,20 @@ def view1():
         if otro == "":
             otro = "n/a"
 
+    # Obtener el día actual
+    day = datetime.now().day
+    
+    if day <= 7:
+        validateMonth = st.checkbox("Este Kudos es para el mes anterior ?")
+        if validateMonth:
+            fecha = datetime.now()
+            mesAnterior = fecha - timedelta(days=fecha.day)
+            fecha_hora = mesAnterior.strftime('%m/%d/%Y %H:%M:%S')
+        else:
+            fecha_hora = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+
+
+
     if st.button('Enviar'):
         if personas != []:
             if situacion != "":
@@ -144,11 +158,8 @@ def view1():
                     client = gspread.authorize(st.session_state.creds)
                     sheet = client.open(config["SHEET"]).worksheet(config["WORKSHEET"])
 
-                    # Obtener la fecha y hora actual
-                    fecha_hora_actual = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
-
                     # Crear lista para enviar
-                    data_to_insert = [fecha_hora_actual, nombre, ", ".join(personas), situacion, ", ".join(valores), otro]
+                    data_to_insert = [fecha_hora, nombre, ", ".join(personas), situacion, ", ".join(valores), otro]
 
                     # Agregar valores a la hoja de cálculo
                     sheet.append_row(data_to_insert)
