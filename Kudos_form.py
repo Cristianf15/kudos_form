@@ -144,9 +144,10 @@ def view1():
             fecha = datetime.now()
             mesAnterior = fecha - timedelta(days=fecha.day)
             fecha_hora = mesAnterior.strftime('%m/%d/%Y %H:%M:%S')
+        else:
+            fecha_hora = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
     else:
         fecha_hora = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
-
 
 
     if st.button('Enviar'):
