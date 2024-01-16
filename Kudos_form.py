@@ -163,7 +163,7 @@ def view1():
                     data_to_insert = [fecha_hora, nombre, ", ".join(personas), situacion, ", ".join(valores), otro]
 
                     # Agregar valores a la hoja de cálculo
-                    sheet.append_row(data_to_insert)
+                    sheet.append_row(data_to_insert,table_range="A:E")
 
                     
                     st.session_state.current_view = "vista2"
