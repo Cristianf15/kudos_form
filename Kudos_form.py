@@ -138,7 +138,7 @@ def view2():
     st.write("")
 
     # Campo Situación
-    situacion = st.text_area("Cuéntanos la situación que quieras celebrar.: :red[*]")
+    situacion = st.text_area("Cuéntanos la situación que quieras celebrar: :red[*]")
     situation_error = st.empty()
     st.write("")
 
@@ -177,7 +177,8 @@ def view2():
         fecha_hora = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
 
     # Botón enviar
-    if st.button('Enviar'):
+    column1, column2, column3 = st.columns([2,3,20])
+    if column2.button('Enviar',use_container_width=True):
         if personas != []:
             if situacion != "":
                 if valores != []:
@@ -204,7 +205,7 @@ def view2():
         else:
             name_error.error('Por favor elige a alguien.', icon="🧐")
 
-    if st.button('Regresar'):
+    if column1.button('Regresar',use_container_width=True):
         st.session_state.current_view = "vista1"
         st.rerun()
 
@@ -283,9 +284,7 @@ def view4():
 
     if column3.button('Ver mis kudos',use_container_width=True):
         st.session_state.current_view = fn.validateBtnForm(config["SPREADSHEET_ID"], "vista5")
-        st.rerun()
-
-    
+        st.rerun() 
 ## ======================================= END VISTA 4 =======================================
 ## ===========================================================================================
 
