@@ -4,6 +4,7 @@ from google.oauth2 import service_account
 import gspread
 import streamlit as st
 import json
+import functions as fn
 from PIL import Image
 
 
@@ -38,12 +39,38 @@ st.session_state.drive_service = build('drive', 'v3', credentials=st.session_sta
 st.session_state.sheets_service = build("sheets", "v4", credentials=st.session_state.creds)
 
 ## ============================================================================================
-
+        
 
 ## ============================================================================================
 ## ========================================= VISTA 1 ==========================================
-## ======================================= Formulario =========================================
+## ========================================= Inicio ===========================================
 def view1():
+    col1, col2, col3 = st.columns(3)
+    
+    containerForm = col2.container(border=True)
+    
+    c1, c2, c3 = containerForm.columns([1,3,1])
+    c2.image('img/Kudos_04.png')
+    
+    containerForm.header("",divider="rainbow")
+    
+    column1, column2, column3, column4 = containerForm.columns([1,2,2,1])
+    
+    
+    if column2.button('Enviar Kudos',use_container_width=True):
+        st.session_state.current_view = "vista2"
+        st.rerun()
+
+    if column3.button('Ver mis Kudos',use_container_width=True):
+        st.session_state.current_view = "vista4"
+        st.rerun()
+## ======================================= END VISTA 1 =======================================
+## ===========================================================================================
+
+## ============================================================================================
+## ========================================= VISTA 2 ==========================================
+## ======================================= Formulario =========================================
+def view2():
     col1, col2, col3 = st.columns([125, 170, 10])
     col1.title(f'¡Envía Kudos a un compañero!')
 
@@ -96,11 +123,11 @@ def view1():
     st.write("")
 
 
-    # Quitar opción anónimo y evitar auto-nominaciones
+    # Añadir equipos a la lista de nombres
     nombres.extend(config["TEAMS"])
 
+    # Quitar opción anónimo y evitar auto-nominaciones
     nombres = [name for name in nombres if name != "Anónimo"]
-
     if nombre != "Anónimo":
         nombres = [name for name in nombres if name != nombre]
 
@@ -149,7 +176,7 @@ def view1():
     else:
         fecha_hora = datetime.now().strftime('%m/%d/%Y %H:%M:%S')
 
-
+    # Botón enviar
     if st.button('Enviar'):
         if personas != []:
             if situacion != "":
@@ -166,8 +193,8 @@ def view1():
                     sheet.append_row(data_to_insert,table_range="A:E")
 
                     
-                    st.session_state.current_view = "vista2"
-                    st.experimental_rerun()
+                    st.session_state.current_view = "vista3"
+                    st.rerun()
                     
 
                 else:
@@ -176,6 +203,10 @@ def view1():
                 situation_error.error('Por favor cuéntanos la situación que quieras celebrar.', icon="🤓")  
         else:
             name_error.error('Por favor elige a alguien.', icon="🧐")
+
+    if st.button('Regresar'):
+        st.session_state.current_view = "vista1"
+        st.rerun()
 
     if open_modal:
         modal.open()
@@ -207,19 +238,115 @@ def view1():
             
             '''
             components.html(html_string, width=500, height=390, scrolling=False) 
-
-## ======================================= END VISTA 1 =======================================
+## ======================================= END VISTA 2 =======================================
 ## ===========================================================================================
 
 ## ============================================================================================
-## ========================================= VISTA 2 ==========================================
-def view2():
+## ========================================= VISTA 3 ==========================================
+## =================================== Formulario Enviado =====================================
+def view3():
     st.success('Formulario enviado con éxito.', icon="👍🏻")
     
     if st.button('Enviar más Kudos'):
+        st.session_state.current_view = "vista2"
+        st.rerun()
+## ======================================= END VISTA 3 =======================================
+## ===========================================================================================
+
+## ============================================================================================
+## ========================================= VISTA 4 ==========================================
+## =================================== Formulario Mis Kudos ===================================
+def view4():
+    col1, col2, col3 = st.columns(3)
+    
+    containerForm = col2.container(border=True)
+    
+    c1, c2, c3 = containerForm.columns([1,3,1])
+    c2.image('img/Kudos_04.png')
+
+    # Campo Nombre
+    nombres = config["NOMBRES"]
+    # Añadir equipos a la lista de nombres
+    nombres.extend(config["TEAMS"])
+
+    containerForm.header("",divider="rainbow")
+
+    st.session_state.nombre = containerForm.selectbox('Tu nombre:', (nombres))
+    st.write("")
+
+    
+    column1, column2, column3, column4 = containerForm.columns([1,2,2,1])
+
+    if column2.button('Regresar',use_container_width=True):
         st.session_state.current_view = "vista1"
-        st.experimental_rerun()
-## ======================================= END VISTA 2 =======================================
+        st.rerun()
+
+    if column3.button('Ver mis kudos',use_container_width=True):
+        st.session_state.current_view = fn.validateBtnForm(config["SPREADSHEET_ID"], "vista5")
+        st.rerun()
+
+    
+## ======================================= END VISTA 4 =======================================
+## ===========================================================================================
+
+## ============================================================================================
+## ========================================= VISTA 5 ==========================================
+## ============================== Mis Kudos / Kudos Observados ================================
+def view5():
+
+    # Obtener datos de la hoja de cálculo
+    range_name = "respuestas!A:E"
+    result = st.session_state.sheets_service.spreadsheets().values().get(
+        spreadsheetId=st.session_state.SPREADSHEET_ID, range=range_name
+    ).execute()
+
+    values = result.get("values", [])
+
+    
+    # Filtrar por nombre 
+    values = fn.filter_by_name(values,st.session_state.nombre)
+    if values == []:
+        st.session_state.current_view = "vista4"
+        main()
+        st.error("¡Ups! Parece que no hay registro de ese mes", icon="🤷🏼‍♂️")
+    else:
+        
+        # Mostrar la primera vista por defecto
+        vista_seleccionada = "🏆 Kudos recibidos"
+
+        vistas = {}
+
+        # Slide
+        vistas["🏆 Kudos recibidos"] = fn.show_kudos_history(values,st.session_state.nombre,1)
+
+        # Gráficas
+        vistas["👀 Kudos nominados"] = fn.show_kudos_history(values,st.session_state.nombre,2)
+
+
+        if st.sidebar.button("Regresar"):
+            st.session_state.current_view = "vista4"
+            st.rerun()
+        st.sidebar.write("")
+        st.sidebar.write("")
+        st.sidebar.write("")
+        st.sidebar.write("")
+        
+        for j in list(vistas.keys()):
+            if st.sidebar.button(j):
+                vista_seleccionada = j 
+            st.sidebar.write("")
+
+    
+        st.sidebar.write("")
+        st.sidebar.write("")
+        if st.sidebar.button("Regresar al inicio"):
+            st.session_state.current_view = "vista1"
+            st.rerun()
+                
+
+        # Mostrar el contenido de la vista seleccionada
+        vistas[vista_seleccionada]() 
+## ======================================= END VISTA 4 =======================================
 ## ===========================================================================================
 
 def main():
@@ -233,6 +360,12 @@ def main():
         view1()
     if st.session_state.current_view == "vista2":
         view2()
+    if st.session_state.current_view == "vista3":
+        view3()
+    if st.session_state.current_view == "vista4":
+        view4()
+    if st.session_state.current_view == "vista5":
+        view5()
 
 if __name__ == "__main__":
     main()
