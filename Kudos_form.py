@@ -265,6 +265,8 @@ def view4():
     c1, c2, c3 = containerForm.columns([1,3,1])
     c2.image('img/Kudos_04.png')
 
+    co1, st.session_state.containerError, co1 = containerForm.columns([1,30,1])
+
     # Campo Nombre
     nombres = config["NOMBRES"]
     # Añadir equipos a la lista de nombres
@@ -277,7 +279,7 @@ def view4():
 
     
     column1, column2, column3, column4 = containerForm.columns([1,2,2,1])
-
+    
     if column2.button('Regresar',use_container_width=True):
         st.session_state.current_view = "vista1"
         st.rerun()
@@ -307,7 +309,7 @@ def view5():
     if values == []:
         st.session_state.current_view = "vista4"
         main()
-        st.error("¡Ups! Parece que no hay registro de ese mes", icon="🤷🏼‍♂️")
+        st.session_state.containerError.info("¡Ups! Parece que aún no tenemos registros tuyos.", icon="🤷🏼‍♂️")
     else:
         
         # Mostrar la primera vista por defecto
@@ -316,10 +318,10 @@ def view5():
         vistas = {}
 
         # Slide
-        vistas["🏆 Kudos recibidos"] = fn.show_kudos_history(values,st.session_state.nombre,1)
+        vistas["🏆 Kudos recibidos"] = fn.show_kudos_history(values,st.session_state.nombre,"recibidos")
 
         # Gráficas
-        vistas["👀 Kudos nominados"] = fn.show_kudos_history(values,st.session_state.nombre,2)
+        vistas["👀 Kudos nominados"] = fn.show_kudos_history(values,st.session_state.nombre,"nominados")
 
 
         if st.sidebar.button("Regresar"):
@@ -345,7 +347,7 @@ def view5():
 
         # Mostrar el contenido de la vista seleccionada
         vistas[vista_seleccionada]() 
-## ======================================= END VISTA 4 =======================================
+## ======================================= END VISTA 5 =======================================
 ## ===========================================================================================
 
 def main():

@@ -110,7 +110,7 @@ def filter_by_name(data_values, name):
 ## ============================================================================================
 def show_kudos_history(values,name,tipo): #   [1]- observador     [2]- laureado
     def kudos_history():
-        if tipo == 1:
+        if tipo == "recibidos":
             st.title(f"Mis Kudos")
             st.write("")
             st.write("")
@@ -148,7 +148,7 @@ def show_kudos_history(values,name,tipo): #   [1]- observador     [2]- laureado
                             st.write("")
             else:
                 st.info("No Tienes kudos aún, pero no te desanimes. ¡Lo estás haciendo increible!✨", icon="😢")
-        elif tipo == 2:
+        elif tipo == "nominados":
             st.title(f"Mis Kudos Cómo Observador")
             st.write("")
             st.write("")
