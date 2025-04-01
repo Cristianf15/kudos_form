@@ -144,11 +144,14 @@ def view2():
 
     # Valores a elegir
     valores = st.multiselect(
-        "¿Cuáles son los valores relacionados?: :red[*]", 
+        "¿Cuáles son los valores, competencias y actitudes relacionadas?: :red[*]", 
         [
-            'Be Curious',
-            'Take Ownership',
-            'Collaborate Well',
+            'Autogestión',
+            'Curiosidad y gusto por aprender cosas nuevas',
+            'Comunicación Asertiva',
+            'Pensamiento Crítico y Estratégico',
+            'Trabajo en Equipo',
+            'Apertura y flexibilidad',
             'Otro'
         ],
         placeholder="Elige una o más opciones"
