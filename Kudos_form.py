@@ -152,6 +152,9 @@ def view2():
             'Pensamiento Crítico y Estratégico',
             'Trabajo en Equipo',
             'Apertura y flexibilidad',
+            'Take Ownership',
+            'Be Curious',
+            'Collaborate Well',
             'Otro'
         ],
         placeholder="Elige una o más opciones"
