@@ -30,7 +30,7 @@ with open("config/config.json", "r", encoding='utf-8') as archivo:
 
 # Autenticación con las credenciales en las APIs utilizadas
 st.session_state.creds = service_account.Credentials.from_service_account_file(
-    config["CREDENTIALS_FILE"], scopes=config["SCOPES"]
+    st.secret["CREDENTIALS_FILE"], scopes=st.secret["SCOPES"]
 )
 
 # Conexión a las API de Google Slides
@@ -116,7 +116,7 @@ def view2():
     st.write("")
     st.write("")
 
-    nombres = config["NOMBRES"]
+    nombres = st.secret["NOMBRES"]
 
     # Campo Nombre
     nombre = st.selectbox('Tu nombre:', (nombres))
@@ -124,7 +124,7 @@ def view2():
 
 
     # Añadir equipos a la lista de nombres
-    nombres.extend(config["TEAMS"])
+    nombres.extend(st.secret["TEAMS"])
 
     # Quitar opción anónimo y evitar auto-nominaciones
     nombres = [name for name in nombres if name != "Anónimo"]
@@ -191,7 +191,7 @@ def view2():
                     # Datos extra
 
                     client = gspread.authorize(st.session_state.creds)
-                    sheet = client.open(config["SHEET"]).worksheet(config["WORKSHEET"])
+                    sheet = client.open(st.secret["SHEET"]).worksheet(st.secret["WORKSHEET"])
 
                     # Crear lista para enviar
                     data_to_insert = [fecha_hora, nombre, ", ".join(personas), situacion, ", ".join(valores), otro]
@@ -274,9 +274,9 @@ def view4():
     co1, st.session_state.containerError, co1 = containerForm.columns([1,30,1])
 
     # Campo Nombre
-    nombres = config["NOMBRES"]
+    nombres = st.secret["NOMBRES"]
     # Añadir equipos a la lista de nombres
-    nombres.extend(config["TEAMS"])
+    nombres.extend(st.secret["TEAMS"])
 
     containerForm.header("",divider="rainbow")
 
@@ -291,7 +291,7 @@ def view4():
         st.rerun()
 
     if column3.button('Ver mis kudos',use_container_width=True):
-        st.session_state.current_view = fn.validateBtnForm(config["SPREADSHEET_ID"], "vista5")
+        st.session_state.current_view = fn.validateBtnForm(st.secret["SPREADSHEET_ID"], "vista5")
         st.rerun() 
 ## ======================================= END VISTA 4 =======================================
 ## ===========================================================================================
