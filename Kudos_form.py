@@ -140,7 +140,7 @@ def view2():
     st.write("")
 
     # Campo Situación
-    situacion = st.text_area("Cuéntanos la situación que quieras celebrar: :red[*]")
+    situacion = st.text_area("Cuéntanos la situación que quieras celebrar: :red[*]", max_chars=500)
     situation_error = st.empty()
     st.write("")
 
