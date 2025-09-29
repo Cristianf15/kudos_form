@@ -38,6 +38,9 @@ st.session_state.slides_service = build("slides", "v1", credentials=st.session_s
 st.session_state.drive_service = build('drive', 'v3', credentials=st.session_state.creds)
 st.session_state.sheets_service = build("sheets", "v4", credentials=st.session_state.creds)
 
+# Listas
+st.session_state.names = list(st.secrets["NOMBRES"])
+st.session_state.namesAndTeams = st.session_state.names + st.secrets["TEAMS"]
 ## ============================================================================================
         
 
@@ -118,24 +121,21 @@ def view2():
     st.write("")
     st.write("")
 
-    nombres = st.secrets["NOMBRES"]
 
     # Campo Nombre
-    nombre = st.selectbox('Tu nombre:', (nombres))
+    nombre = st.selectbox('Tu nombre:', (st.session_state.names))
     st.write("")
 
 
-    # Añadir equipos a la lista de nombres
-    nombres.extend(st.secrets["TEAMS"])
 
     # Quitar opción anónimo y evitar auto-nominaciones
-    nombres = [name for name in nombres if name != "Anónimo"]
+    st.session_state.namesAndTeams = [name for name in st.session_state.namesAndTeams if name != "Anónimo"]
     if nombre != "Anónimo":
-        nombres = [name for name in nombres if name != nombre]
+        st.session_state.namesAndTeams = [name for name in st.session_state.namesAndTeams if name != nombre]
 
     # Campo Personas
     personas = st.multiselect(
-    '¿A quién vas a felicitar?: :red[*]', nombres, [], placeholder="Elige una o más opciones")
+    '¿A quién vas a felicitar?: :red[*]', st.session_state.namesAndTeams, [], placeholder="Elige una o más opciones")
     name_error = st.empty()
     st.write("")
 
@@ -275,14 +275,11 @@ def view4():
 
     co1, st.session_state.containerError, co1 = containerForm.columns([1,30,1])
 
-    # Campo Nombre
-    nombres = st.secrets["NOMBRES"]
-    # Añadir equipos a la lista de nombres
-    nombres.extend(st.secrets["TEAMS"])
+    
 
     containerForm.header("",divider="rainbow")
 
-    st.session_state.nombre = containerForm.selectbox('Tu nombre:', (nombres))
+    st.session_state.nombre = containerForm.selectbox('Tu nombre:', (st.session_state.namesAndTeams))
     st.write("")
 
     
