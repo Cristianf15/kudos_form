@@ -48,7 +48,6 @@ st.session_state.namesAndTeams = st.session_state.names + st.secrets["TEAMS"]
 ## ========================================= VISTA 1 ==========================================
 ## ========================================= Inicio ===========================================
 def view1():
-    st.write("Branch: Develop")
     
     col1, col2, col3 = st.columns(3)
     
