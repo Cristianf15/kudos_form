@@ -30,7 +30,7 @@ with open("config/config.json", "r", encoding='utf-8') as archivo:
 
 # Autenticación con las credenciales en las APIs utilizadas
 st.session_state.creds = service_account.Credentials.from_service_account_file(
-    config["CREDENTIALS_FILE"], scopes=config["SCOPES"]
+    st.secrets["CREDENTIALS_FILE"], scopes=st.secrets["SCOPES"]
 )
 
 # Conexión a las API de Google Slides
@@ -38,6 +38,9 @@ st.session_state.slides_service = build("slides", "v1", credentials=st.session_s
 st.session_state.drive_service = build('drive', 'v3', credentials=st.session_state.creds)
 st.session_state.sheets_service = build("sheets", "v4", credentials=st.session_state.creds)
 
+# Listas
+st.session_state.names = list(st.secrets["NOMBRES"])
+st.session_state.namesAndTeams = st.session_state.names + st.secrets["TEAMS"]
 ## ============================================================================================
         
 
@@ -45,6 +48,8 @@ st.session_state.sheets_service = build("sheets", "v4", credentials=st.session_s
 ## ========================================= VISTA 1 ==========================================
 ## ========================================= Inicio ===========================================
 def view1():
+    st.write("Branch: Develop")
+    
     col1, col2, col3 = st.columns(3)
     
     containerForm = col2.container(border=True)
@@ -116,29 +121,26 @@ def view2():
     st.write("")
     st.write("")
 
-    nombres = config["NOMBRES"]
 
     # Campo Nombre
-    nombre = st.selectbox('Tu nombre:', (nombres))
+    nombre = st.selectbox('Tu nombre:', (st.session_state.names))
     st.write("")
 
 
-    # Añadir equipos a la lista de nombres
-    nombres.extend(config["TEAMS"])
 
     # Quitar opción anónimo y evitar auto-nominaciones
-    nombres = [name for name in nombres if name != "Anónimo"]
+    st.session_state.namesAndTeams = [name for name in st.session_state.namesAndTeams if name != "Anónimo"]
     if nombre != "Anónimo":
-        nombres = [name for name in nombres if name != nombre]
+        st.session_state.namesAndTeams = [name for name in st.session_state.namesAndTeams if name != nombre]
 
     # Campo Personas
     personas = st.multiselect(
-    '¿A quién vas a felicitar?: :red[*]', nombres, [], placeholder="Elige una o más opciones")
+    '¿A quién vas a felicitar?: :red[*]', st.session_state.namesAndTeams, [], placeholder="Elige una o más opciones")
     name_error = st.empty()
     st.write("")
 
     # Campo Situación
-    situacion = st.text_area("Cuéntanos la situación que quieras celebrar: :red[*]")
+    situacion = st.text_area("Cuéntanos la situación que quieras celebrar: :red[*]", max_chars=500)
     situation_error = st.empty()
     st.write("")
 
@@ -191,7 +193,7 @@ def view2():
                     # Datos extra
 
                     client = gspread.authorize(st.session_state.creds)
-                    sheet = client.open(config["SHEET"]).worksheet(config["WORKSHEET"])
+                    sheet = client.open(st.secrets["SHEET"]).worksheet(st.secrets["WORKSHEET"])
 
                     # Crear lista para enviar
                     data_to_insert = [fecha_hora, nombre, ", ".join(personas), situacion, ", ".join(valores), otro]
@@ -273,14 +275,11 @@ def view4():
 
     co1, st.session_state.containerError, co1 = containerForm.columns([1,30,1])
 
-    # Campo Nombre
-    nombres = config["NOMBRES"]
-    # Añadir equipos a la lista de nombres
-    nombres.extend(config["TEAMS"])
+    
 
     containerForm.header("",divider="rainbow")
 
-    st.session_state.nombre = containerForm.selectbox('Tu nombre:', (nombres))
+    st.session_state.nombre = containerForm.selectbox('Tu nombre:', (st.session_state.namesAndTeams))
     st.write("")
 
     
@@ -291,7 +290,7 @@ def view4():
         st.rerun()
 
     if column3.button('Ver mis kudos',use_container_width=True):
-        st.session_state.current_view = fn.validateBtnForm(config["SPREADSHEET_ID"], "vista5")
+        st.session_state.current_view = fn.validateBtnForm(st.secrets["SPREADSHEET_ID"], "vista5")
         st.rerun() 
 ## ======================================= END VISTA 4 =======================================
 ## ===========================================================================================
